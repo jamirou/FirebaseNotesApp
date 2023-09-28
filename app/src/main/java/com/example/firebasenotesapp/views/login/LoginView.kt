@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.firebasenotesapp.viewModels.LoginViewModel
 
 @Composable
-fun LoginView(navController: NavController, loginVM: LoginViewModel) {
+fun LoginView(navController: NavHostController, loginVM: LoginViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
@@ -54,7 +54,11 @@ fun LoginView(navController: NavController, loginVM: LoginViewModel) {
         )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            onClick = { /*TODO*/ }, modifier = Modifier
+            onClick = {
+                loginVM.login(email, password) {
+                    navController.navigate("Home")
+                }
+            }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp)
         ) {
