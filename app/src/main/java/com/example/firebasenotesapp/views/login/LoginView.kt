@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.firebasenotesapp.components.Alert
 import com.example.firebasenotesapp.viewModels.LoginViewModel
 
 @Composable
@@ -63,6 +64,14 @@ fun LoginView(navController: NavHostController, loginVM: LoginViewModel) {
                 .padding(start = 30.dp, end = 30.dp)
         ) {
             Text(text = "Enter")
+        }
+        if (loginVM.showAlert) {
+            Alert(title = "ALERT", message = "USER or PASSWORD are WRONG",
+                confirmText = "Accept",
+                onConfirmClick = { loginVM.closeAlert() }
+            ) {
+
+            }
         }
 
     }
