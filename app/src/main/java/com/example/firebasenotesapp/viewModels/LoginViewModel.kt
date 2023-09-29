@@ -32,6 +32,24 @@ class LoginViewModel: ViewModel() {
             }
         }
     }
+
+    fun create_user(email: String, password: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener {task ->
+                        if (task.isSuccessful) {
+                            onSuccess()
+                        }else {
+                            Log.d("Firebase Error", "User and password are wrong")
+                            showAlert = true
+                        }
+                    }
+            }catch (e: Exception) {
+                Log.d("Error in app","the error: ${e.localizedMessage}")
+            }
+        }
+    }
     fun closeAlert() {
         showAlert = false
     }
