@@ -47,7 +47,9 @@ fun EditNoteView(navController: NavController, notesVM: NotesViewModel, idDoc: S
                 },
                 actions = {
                     IconButton(onClick = {
-
+                        notesVM.updateNote(idDoc) {
+                            navController.popBackStack()
+                        }
                     }) {
                         Icon(
                             imageVector = Icons.Default.Check,

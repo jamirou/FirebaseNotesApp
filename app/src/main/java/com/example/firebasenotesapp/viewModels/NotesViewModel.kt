@@ -48,7 +48,7 @@ class NotesViewModel : ViewModel() {
                 if (querySnapshot != null) {
                     for (document in querySnapshot) {
                         val myDocument = document.toObject(NotesState::class.java).copy(idDoc = document.id)
-                            documents.add(myDocument)
+                        documents.add(myDocument)
                     }
                     _notesData.value = documents
                 }
@@ -96,6 +96,27 @@ class NotesViewModel : ViewModel() {
                 }
             }
     }
+
+    fun updateNote(idDoc: String, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val editNote = hashMapOf(
+                    "title" to state.title,
+                    "note" to state.note
+                )
+                firestore
+                    .collection("Notes")
+                    .document(idDoc)
+                    .update(editNote as Map<String, Any>)
+                    .addOnSuccessListener {
+                        onSuccess()
+                    }
+            } catch (e: Exception) {
+                Log.d("ERROR EDITING DATA", "Error editing ${e.localizedMessage}")
+            }
+        }
+    }
+
 
     fun signOut() {
         auth.signOut()
