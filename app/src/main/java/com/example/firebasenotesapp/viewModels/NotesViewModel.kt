@@ -1,6 +1,9 @@
 package com.example.firebasenotesapp.viewModels
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firebasenotesapp.model.NotesState
@@ -24,6 +27,9 @@ class NotesViewModel : ViewModel() {
     private val _notesData = MutableStateFlow<List<NotesState>>(emptyList())
     val notesData: StateFlow<List<NotesState>> = _notesData
 
+    var state by mutableStateOf(NotesState())
+        private set
+
     fun fetchNotes() {
         val email = auth.currentUser?.email
         firestore.collection("Notes")
@@ -38,8 +44,8 @@ class NotesViewModel : ViewModel() {
                         val myDocument = document.toObject(NotesState::class.java).copy(idDoc = document.id)
                             documents.add(myDocument)
                     }
+                    _notesData.value = documents
                 }
-                _notesData.value = documents
             }
     }
 
@@ -69,6 +75,20 @@ class NotesViewModel : ViewModel() {
         val currentDate: Date = Calendar.getInstance().time
         val res = SimpleDateFormat("dd/MM/yyy", Locale.getDefault())
         return res.format(currentDate)
+    }
+
+    fun getNoteById(documentId: String) {
+        firestore.collection("Notes")
+            .document(documentId)
+            .addSnapshotListener{snapshot, _ ->
+                if (snapshot != null) {
+                    val note = snapshot.toObject(NotesState::class.java)
+                    state = state.copy(
+                        title = note?.title ?: "",
+                        note = note?.note ?: ""
+                    )
+                }
+            }
     }
 
     fun signOut() {
