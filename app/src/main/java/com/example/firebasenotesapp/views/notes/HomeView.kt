@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.example.firebasenotesapp.components.CardNote
 import com.example.firebasenotesapp.viewModels.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +61,9 @@ fun HomeView(navController: NavController, notesVM: NotesViewModel) {
             val datos by notesVM.notesData.collectAsState()
             LazyColumn {
                 items(datos) {item ->
-                    Text(text = item.title)
+                    CardNote(title = item.title, note = item.note, date = item.date) {
+                        //Navigate to edit
+                    }
                 }
             }
         }
