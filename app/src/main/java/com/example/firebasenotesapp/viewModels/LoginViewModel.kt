@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel: ViewModel() {
@@ -57,18 +58,21 @@ class LoginViewModel: ViewModel() {
         val id = auth.currentUser?.uid
         val email = auth.currentUser?.email
 
-        val user = UserModel(
-            userId = id.toString(),
-            email = email.toString(),
-            userName = userName
-        )
-        FirebaseFirestore.getInstance().collection("Users")
-            .add(user)
-            .addOnSuccessListener {
-                Log.d("Data saved", "Successfully saving data")
-            }.addOnFailureListener{
-                Log.d("Error saving", "Error saving in firestore")
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = UserModel(
+                userId = id.toString(),
+                email = email.toString(),
+                userName = userName
+            )
+            FirebaseFirestore.getInstance().collection("Users")
+                .add(user)
+                .addOnSuccessListener {
+                    Log.d("Data saved", "Successfully saving data")
+                }.addOnFailureListener{
+                    Log.d("Error saving", "Error saving in firestore")
+                }
+        }
+
     }
 
     fun closeAlert() {
