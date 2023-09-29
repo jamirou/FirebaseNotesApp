@@ -1,6 +1,5 @@
 package com.example.firebasenotesapp.views.notes
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
