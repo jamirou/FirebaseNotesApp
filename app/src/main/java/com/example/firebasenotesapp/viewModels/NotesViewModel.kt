@@ -117,6 +117,22 @@ class NotesViewModel : ViewModel() {
         }
     }
 
+    fun deleteNote(idDoc: String, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                firestore
+                    .collection("Notes")
+                    .document(idDoc)
+                    .delete()
+                    .addOnSuccessListener {
+                        onSuccess()
+                    }
+            } catch (e: Exception) {
+                Log.d("ERROR DELETING DATA", "Error deleting ${e.localizedMessage}")
+            }
+        }
+    }
+
 
     fun signOut() {
         auth.signOut()

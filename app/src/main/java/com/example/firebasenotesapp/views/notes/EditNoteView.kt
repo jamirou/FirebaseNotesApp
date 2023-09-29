@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,6 +48,15 @@ fun EditNoteView(navController: NavController, notesVM: NotesViewModel, idDoc: S
                 },
                 actions = {
                     IconButton(onClick = {
+                        notesVM.deleteNote(idDoc) {
+                            navController.popBackStack()
+                        }
+                    })
+                    {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete note")
+                    }
+
+                    IconButton(onClick = {
                         notesVM.updateNote(idDoc) {
                             navController.popBackStack()
                         }
@@ -76,7 +86,7 @@ fun EditNoteView(navController: NavController, notesVM: NotesViewModel, idDoc: S
             )
             OutlinedTextField(
                 value = state.note,
-                onValueChange = { notesVM.onValue(it,"note") },
+                onValueChange = { notesVM.onValue(it, "note") },
                 label = { Text(text = "Note") },
                 modifier = Modifier
                     .fillMaxWidth()
