@@ -30,6 +30,12 @@ class NotesViewModel : ViewModel() {
     var state by mutableStateOf(NotesState())
         private set
 
+    fun onValue(value: String, text: String) {
+        when(text) {
+            "title" -> state = state.copy(title = value)
+            "note" -> state = state.copy(note = value)
+        }
+    }
     fun fetchNotes() {
         val email = auth.currentUser?.email
         firestore.collection("Notes")
